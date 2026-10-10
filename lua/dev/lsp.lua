@@ -6,21 +6,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- See `:help vim.lsp.*` for documentation on any of the below functions
 		local opts = { buffer = ev.buf, silent = true }
 
-		-- Format on save
-		if ev.data.client_id then
-			local client = vim.lsp.get_client_by_id(ev.data.client_id)
-			if client and client.supports_method("textDocument/formatting") then
-				local group = vim.api.nvim_create_augroup("LspFormatOnSave", { clear = false })
-
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					group = group,
-					buffer = ev.buf,
-					callback = function()
-						vim.lsp.buf.format({ async = false })
-					end,
-				})
-			end
-		end
+		-- Format on save handled by conform.nvim (see plugins/conform.lua)
 
 		-- set keybinds
 		opts.desc = "Show LSP references"

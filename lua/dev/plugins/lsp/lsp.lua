@@ -16,6 +16,12 @@ return {
       capabilities = capabilities,
     })
 
+    -- Proto: default root marker is only .git, which fails in non-git repos;
+    -- protols.toml/buf.yaml mark the workspace root so include_paths resolve
+    vim.lsp.config("protols", {
+      root_markers = { "protols.toml", "buf.yaml", ".git" },
+    })
+
     -- Setup clangd for C++23
     vim.lsp.config("clangd", {
       cmd = {

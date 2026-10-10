@@ -48,14 +48,9 @@ return {
 				auto_open = false,
 			},
 			lsp = {
-				color = {
-					enabled = true,
-					background = false,
-					background_color = nil,
-					foreground = false,
-					virtual_text = true,
-					virtual_text_str = "■",
-				},
+				-- Document colors are handled natively by Neovim 0.12+'s
+				-- vim.lsp.document_color (enabled by default) instead of
+				-- flutter-tools' now-deprecated plugin-managed lsp.color.
 				on_attach = function(_, bufnr)
 					-- Add Flutter-specific keymaps (using capital F to avoid conflicts with Telescope)
 					local opts = { buffer = bufnr, noremap = true, silent = true }

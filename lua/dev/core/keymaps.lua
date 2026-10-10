@@ -38,25 +38,38 @@ vim.keymap.set("n", "<leader>cn", function()
 end, { desc = "Open Claude pane (choose directory)" })
 
 -- ===============================
--- Split Navigation Keymaps
+-- Split Navigation Keymaps (tmux-aware)
 -- ===============================
+-- <C-hjkl> move between nvim splits, and fall through to tmux panes
+-- when there's no split left to move to (see plugins/tmux-navigator.lua
+-- and the "is_vim" forwarding in ~/.config/tmux/tmux.conf).
 
 -- Options
 local opts = { noremap = true, silent = true }
 
--- Normal mode: navigate splits
-vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
-vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
-vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
-vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
+-- Normal mode: navigate splits / tmux panes
+vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<CR>", opts)
+vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<CR>", opts)
+vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>", opts)
+vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>", opts)
 
--- Terminal mode: navigate splits without leaving insert mode
-vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", opts)
-vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", opts)
-vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", opts)
-vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", opts)
+-- Terminal mode: navigate splits / tmux panes without leaving insert mode
+vim.keymap.set("t", "<C-h>", [[<C-\><C-n><cmd>TmuxNavigateLeft<CR>]], opts)
+vim.keymap.set("t", "<C-l>", [[<C-\><C-n><cmd>TmuxNavigateRight<CR>]], opts)
+vim.keymap.set("t", "<C-j>", [[<C-\><C-n><cmd>TmuxNavigateDown<CR>]], opts)
+vim.keymap.set("t", "<C-k>", [[<C-\><C-n><cmd>TmuxNavigateUp<CR>]], opts)
 
 vim.keymap.set("n", "<leader>t", function()
 	require("dev.core.terminal").toggle()
 end, { noremap = true, silent = true })
 vim.keymap.set("t", "<C-c>", [[<C-\><C-n>]], { noremap = true, silent = true })
+
+-- Open current file in default browser (HTML preview, mirrors <leader>mp).
+vim.keymap.set("n", "<leader>hp", function()
+	require("dev.core.browser").open_current()
+end, { desc = "Preview current file in browser" })
+
+-- Preview current markdown file in a floating glow popup.
+vim.keymap.set("n", "<leader>mp", function()
+	require("dev.core.glow").open_current()
+end, { desc = "Preview markdown in glow popup" })
